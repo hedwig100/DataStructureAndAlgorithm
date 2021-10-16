@@ -1,6 +1,7 @@
+.DS_Store
 .vscode 
 
 src/*.o 
 src/*.out
 
-src/all
+test 
