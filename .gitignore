@@ -2,3 +2,5 @@
 
 src/*.o 
 src/*.out
+
+src/all
