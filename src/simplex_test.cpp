@@ -1,12 +1,25 @@
 #include <cassert> 
+#include <cmath> 
 #include <stdio.h>
 #include "simplex.hpp" 
+
+const float EPS = 1e-10;
+bool near(float x,float y) {
+    return std::abs(x - y) < EPS; 
+}
+bool near(std::vector<double> x,std::vector<double> y) {
+    bool ans = true; 
+    for (int i = 0;i < (int)x.size();i++) {
+        ans &= near(x[i],y[i]); 
+    }
+    return ans; 
+}
 
 void test1() {
     int n = 2; 
     int m = 3; 
     std::vector<std::vector<double>> A(m,std::vector<double>(n)); 
-    std::vector<double> b(m),c(n); 
+    std::vector<double> b(m),c(n),ans(n); 
 
     A = {
         {1,1},
@@ -18,6 +31,8 @@ void test1() {
 
     c = {3,2}; 
 
+    ans = {2.5,1.5}; 
+
     Dictionary dic(A,b,c,MaxCoefficient);
     OptimalSolution sol = dic.solve(); 
     printf("sol = %d\n",sol);
@@ -28,14 +43,14 @@ void test1() {
         printf("%lf ",answer[i]); 
     }
     printf("]\n");
-    assert(answer[0] == 2.5 && answer[1] == 1.5); 
+    assert(near(answer,ans)); 
 }
 
 void test2() {
     int n = 2; 
     int m = 3; 
     std::vector<std::vector<double>> A(m,std::vector<double>(n)); 
-    std::vector<double> b(m),c(n); 
+    std::vector<double> b(m),c(n),ans(n); 
 
     A = {
         {60,40},
@@ -47,6 +62,8 @@ void test2() {
 
     c = {400,300}; 
 
+    ans = {30,50}; 
+
     Dictionary dic(A,b,c,MaxCoefficient);
     OptimalSolution sol = dic.solve(); 
     printf("sol = %d\n",sol);
@@ -57,7 +74,7 @@ void test2() {
         printf("%lf ",answer[i]); 
     }
     printf("]\n");
-    assert(answer[0] == 30 && answer[1] == 50); 
+    assert(near(answer,ans)); 
 }
 
 
@@ -75,7 +92,7 @@ void test3() {
 
     b = {1,2,3}; 
 
-    c = {3,2}; 
+    c = {3,2};
 
     Dictionary dic(A,b,c,Bland);
     OptimalSolution sol = dic.solve(); 
