@@ -38,9 +38,11 @@ int Dictionary::pick_nonbasis_pivot(void) {
     int nonbasis_pivot = -1;
     for (int i = 0;i < n;i++) {
         if (c[i] > 0) {
-            nonbasis_pivot = i;
-            if (pivot_selection == Bland) break;
-            else if (pivot_selection == MaxCoefficient && c[i] > c[nonbasis_pivot]) {
+            if (nonbasis_pivot < 0) {
+                nonbasis_pivot = i;
+            } else if (pivot_selection == Bland && nonbasis_index[i] < nonbasis_index[nonbasis_pivot]) {
+                nonbasis_pivot = i; 
+            } else if (pivot_selection == MaxCoefficient && c[i] > c[nonbasis_pivot]) {
                 nonbasis_pivot = i; 
             }  
         }
@@ -56,6 +58,8 @@ int Dictionary::pick_basis_pivot(int nonbasis_pivot) {
             if (basis_pivot < 0 || min_ratio > b[i]/A[i][nonbasis_pivot]) {
                 basis_pivot = i; 
                 min_ratio = b[i]/A[i][nonbasis_pivot];
+            } else if (min_ratio*A[i][nonbasis_pivot] == b[i] && basis_index[i] < basis_index[basis_pivot]) {
+                basis_pivot = i; 
             }
         }
     }
