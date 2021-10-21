@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <vector>
+#include <cmath> 
 
 typedef enum {
     Exist,
@@ -30,7 +31,11 @@ struct Dictionary {
     int pick_nonbasis_pivot(void); 
     int pick_basis_pivot(int nonbasis_pivot); 
     void pivot_operation(int nonbasis_pivot,int basis_pivot); 
+    void add_artificial_variable(int basis_pivot); 
+    void delete_artificial_variable(); 
+    void construct_c(std::vector<double> before_c); 
     OptimalSolution pivot_step(); 
+    OptimalSolution find_feasible(); 
     OptimalSolution solve(); 
     std::vector<double> answer(); 
 };

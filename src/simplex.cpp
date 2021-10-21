@@ -19,7 +19,7 @@ Dictionary::Dictionary(
 void Dictionary::print_state(void) {
     printf("maximize: %lf",ans); 
     for (int i = 0;i < n;i++) {
-        printf(" + %lfx_%d",c[i],nonbasis_index[i]+1); 
+        printf(" %c %lfx_%d",(c[i] > 0 ? '+' : '-'),std::abs(c[i]),nonbasis_index[i]+1); 
     }
     printf("\n"); 
 
@@ -28,7 +28,7 @@ void Dictionary::print_state(void) {
         if (i == 0) printf("x%d = %lf",basis_index[i]+1,b[i]); 
         else printf("     x%d = %lf",basis_index[i]+1,b[i]); 
         for (int j = 0;j < n;j++) {
-            printf(" - %lfx%d",A[i][j],nonbasis_index[j]+1); 
+            printf(" %c %lfx%d",(A[i][j] > 0 ? '-' : '+'),std::abs(A[i][j]),nonbasis_index[j]+1); 
         }
         printf("\n"); 
     }
@@ -113,6 +113,103 @@ OptimalSolution Dictionary::pivot_step() {
     }
     pivot_operation(nonbasis_pivot,basis_pivot); 
     return Continue; 
+}
+
+void Dictionary::add_artificial_variable(int basis_pivot) {
+    for (int i = 0;i < m;i++) {
+        A[i].push_back(-1.0); 
+    } 
+
+    for (int i = 0;i < n;i++) {
+        c[i] = 0.0;
+    }
+    c.push_back(-1.0); 
+
+    n++;
+    nonbasis_index.push_back(n+m-1);
+
+    // first step to get a feasible dictionary 
+    printf("Initial state\n");
+    print_state(); 
+    pivot_operation(n-1,basis_pivot); 
+}
+
+void Dictionary::delete_artificial_variable() {
+    int artificial_pivot = -1;
+    for (int i = 0;i < m;i++) {
+        if (basis_index[i] == n+m-1) {
+            artificial_pivot = i; 
+            break; 
+        }
+    }
+    if (artificial_pivot >= 0) {
+        pivot_operation(n-1,artificial_pivot); 
+    } else {
+        for (int i = 0;i < n;i++) {
+            if (nonbasis_index[i] == n+m-1) {
+                artificial_pivot = i;
+                break; 
+            }
+        }
+        for (int i = 0;i < m;i++) {
+            std::swap(A[i][artificial_pivot],A[i][n-1]); 
+        }
+        std::swap(nonbasis_index[artificial_pivot],nonbasis_index[n-1]); 
+    }
+
+    for (int i = 0;i < m;i++) {
+        A[i].pop_back(); 
+    }
+    c.pop_back();
+    nonbasis_index.pop_back(); 
+    n--;
+}
+
+void Dictionary::construct_c(std::vector<double> before_c) {
+    for (int i = 0;i < n;i++) {
+        c[i] = 0.0;
+    }
+    ans = 0.0; 
+
+    for (int i = 0;i < n;i++) {
+        if (nonbasis_index[i] < n) {
+            c[i] = before_c[nonbasis_index[i]]; 
+        }
+    }
+
+    for (int i = 0;i < m;i++) {
+        if (basis_index[i] < n) {
+            for (int j = 0;j < n;j++) {
+                c[j] -= before_c[basis_index[i]]*A[i][j]; 
+            }
+            ans += before_c[basis_index[i]]*b[i]; 
+        }
+    }
+}
+
+OptimalSolution Dictionary::find_feasible() {
+    // check if dict now is feasible dict or not 
+    double max_minus = 0.0; 
+    int basis_pivot = -1;
+    for (int i = 0;i < m;i++) {
+        if (b[i] < max_minus) {
+            max_minus = b[i]; 
+            basis_pivot = i;
+        }
+    }
+    if (basis_pivot < 0) {
+        return Exist; // all b[i] >= 0,already feasible 
+    }
+
+    std::vector<double> before_c = c;
+    add_artificial_variable(basis_pivot); 
+    OptimalSolution sol = solve(); 
+    if (sol != Exist || ans < 0.0) {
+        return NoExist;
+    }
+    delete_artificial_variable(); 
+    construct_c(before_c); 
+    return Exist; 
 }
 
 OptimalSolution Dictionary::solve() {

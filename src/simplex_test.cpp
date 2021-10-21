@@ -100,9 +100,44 @@ void test3() {
     assert(sol == Unbounded); 
 }
 
+void test4() {
+    int n = 2; 
+    int m = 4; 
+    std::vector<std::vector<double>> A(m,std::vector<double>(n)); 
+    std::vector<double> b(m),c(n),ans(n); 
+
+    A = {
+        {2,3},
+        {-5,9},
+        {5,-9},
+        {6,-3},
+    }; 
+
+    b = {6,15,-15,-3}; 
+
+    c = {-6,6};
+
+    ans = {0,(double)5/3}; 
+
+    Dictionary dic(A,b,c,Bland);
+    OptimalSolution sol = dic.find_feasible(); 
+    assert(sol == Exist); 
+    sol = dic.solve(); 
+    printf("sol = %d\n",sol);
+    assert(sol == Exist);
+    auto answer = dic.answer(); 
+    printf("ans ["); 
+    for (int i = 0;i < n;i++) {
+        printf("%lf ",answer[i]); 
+    }
+    printf("]\n");
+    assert(near(ans,answer));
+}
+
 int main() {
     test1();
     test2(); 
     test3();
+    test4(); 
     return 0;
 }
