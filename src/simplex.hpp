@@ -1,5 +1,5 @@
-#include <vector>
 #include <stdio.h>
+#include <vector>
 
 typedef enum {
     Exist,
@@ -8,6 +8,11 @@ typedef enum {
     Continue,
 } OptimalSolution;
 
+typedef enum {
+    MaxCoefficient,
+    // MaxGain, 
+    Bland
+} PivotSelection; 
 
 struct Dictionary {
     int n; // number of variables
@@ -18,8 +23,9 @@ struct Dictionary {
     std::vector<double> c; // size n
     std::vector<int> nonbasis_index;  
     std::vector<int> basis_index;  
+    PivotSelection pivot_selection; 
 
-    Dictionary(std::vector<std::vector<double>> A, std::vector<double> b, std::vector<double> c); 
+    Dictionary(std::vector<std::vector<double>> A, std::vector<double> b, std::vector<double> c,PivotSelection pivot_selection); 
     void print_state(void); 
     int pick_nonbasis_pivot(void); 
     int pick_basis_pivot(int nonbasis_pivot); 

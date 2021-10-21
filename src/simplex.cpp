@@ -3,8 +3,9 @@
 Dictionary::Dictionary(
     std::vector<std::vector<double>> A, 
     std::vector<double> b,
-    std::vector<double> c
-    ) :A(A),b(b),c(c) {
+    std::vector<double> c,
+    PivotSelection pivot_selection
+    ) :A(A),b(b),c(c),pivot_selection(pivot_selection) {
     n = (int)c.size(); 
     m = (int)b.size(); 
     nonbasis_index.resize(n); 
@@ -38,7 +39,10 @@ int Dictionary::pick_nonbasis_pivot(void) {
     for (int i = 0;i < n;i++) {
         if (c[i] > 0) {
             nonbasis_pivot = i;
-            break; 
+            if (pivot_selection == Bland) break;
+            else if (pivot_selection == MaxCoefficient && c[i] > c[nonbasis_pivot]) {
+                nonbasis_pivot = i; 
+            }  
         }
     }
     return nonbasis_pivot; 

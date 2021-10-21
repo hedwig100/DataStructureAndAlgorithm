@@ -18,7 +18,7 @@ void test1() {
 
     c = {3,2}; 
 
-    Dictionary dic(A,b,c);
+    Dictionary dic(A,b,c,MaxCoefficient);
     OptimalSolution sol = dic.solve(); 
     printf("sol = %d\n",sol);
     assert(sol == Exist);
@@ -47,7 +47,7 @@ void test2() {
 
     c = {400,300}; 
 
-    Dictionary dic(A,b,c);
+    Dictionary dic(A,b,c,MaxCoefficient);
     OptimalSolution sol = dic.solve(); 
     printf("sol = %d\n",sol);
     assert(sol == Exist);
@@ -77,7 +77,7 @@ void test3() {
 
     c = {3,2}; 
 
-    Dictionary dic(A,b,c);
+    Dictionary dic(A,b,c,Bland);
     OptimalSolution sol = dic.solve(); 
     printf("sol = %d\n",sol);
     assert(sol == Unbounded); 
