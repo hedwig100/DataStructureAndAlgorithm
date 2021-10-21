@@ -129,7 +129,7 @@ void Dictionary::add_artificial_variable(int basis_pivot) {
     nonbasis_index.push_back(n+m-1);
 
     // first step to get a feasible dictionary 
-    printf("Initial state\n");
+    printf("\nInitial state\n");
     print_state(); 
     pivot_operation(n-1,basis_pivot); 
 }
