@@ -78,26 +78,22 @@ void Dictionary::pivot_operation(int nonbasis_pivot,int basis_pivot) {
     for (int i = 0;i < m;i++) {
         if (i == basis_pivot) continue;
         a = A[i][nonbasis_pivot]; 
-        b[i] -= A[i][nonbasis_pivot]*b[basis_pivot]; 
+        b[i] -= b[basis_pivot]*a; 
         for (int j = 0;j < n;j++) {
-            if (j != nonbasis_pivot) {
-                A[i][j] -= A[basis_pivot][j]*a; 
-            } else {
-                A[i][j] = -A[basis_pivot][j]*a;
-            }
+            if (j == nonbasis_pivot) continue;
+            A[i][j] -= A[basis_pivot][j]*a;
         }
+        A[i][nonbasis_pivot] = -A[basis_pivot][nonbasis_pivot]*a;
     }
 
     // object function 
-    ans += b[basis_pivot]*c[nonbasis_pivot]; 
     a = c[nonbasis_pivot]; 
+    ans += b[basis_pivot]*a; 
     for (int j = 0;j < n;j++) {
-        if (j != nonbasis_pivot) {
-            c[j] -= A[basis_pivot][j]*a; 
-        } else {
-            c[j] = -A[basis_pivot][j]*a; 
-        }
+        if (j == nonbasis_pivot) continue; 
+        c[j] -= A[basis_pivot][j]*a; 
     }
+    c[nonbasis_pivot] = -A[basis_pivot][nonbasis_pivot]*a; 
     
     std::swap(basis_index[basis_pivot],nonbasis_index[nonbasis_pivot]);
 }
