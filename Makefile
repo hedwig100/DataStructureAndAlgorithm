@@ -1,11 +1,11 @@
-CC = g++
-CCFLAGS = -std=gnu++14
+CXX = g++
+CXXFLAGS = -std=gnu++14
 
 TESTSRCS = $(wildcard src/*.cpp)
 TESTOBJS = $(TESTSRCS:%.cpp=%.o)
 
 test: $(TESTOBJS)
-	$(CC) $(CCFLAGS) -o $@ $^ 
+	$(CXX) $(CXXFLAGS) -o $@ $^ 
 
 clean: 
 	rm test $(TESTOBJS)
