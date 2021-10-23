@@ -168,11 +168,45 @@ void test5() {
     assert(near(ans,answer));
 }
 
+void test6() {
+    int n = 3; 
+    int m = 3; 
+    std::vector<std::vector<double>> A(m,std::vector<double>(n)); 
+    std::vector<double> b(m),c(n),ans(n); 
+
+    A = {
+        {2,-2},
+        {1,1,-2},
+        {1,1,1},
+    }; 
+
+    b = {6,3,3}; 
+
+    c = {1,-2,1};
+
+    ans = {3,0,0}; 
+
+    Dictionary dic(A,b,c,Bland);
+    OptimalSolution sol = dic.find_feasible(); 
+    assert(sol == Exist); 
+    sol = dic.solve(); 
+    printf("sol = %d\n",sol);
+    assert(sol == Exist);
+    auto answer = dic.answer(); 
+    printf("ans ["); 
+    for (int i = 0;i < n;i++) {
+        printf("%lf ",answer[i]); 
+    }
+    printf("]\n");
+    assert(near(ans,answer));
+}
+
 int main() {
     test1();
     test2(); 
     test3();
     test4(); 
     test5();
+    test6(); 
     return 0;
 }
