@@ -25,8 +25,9 @@ struct Dictionary {
     std::vector<int> nonbasis_index;  
     std::vector<int> basis_index;  
     PivotSelection pivot_selection; 
+    bool verbose;
 
-    Dictionary(std::vector<std::vector<double>> A, std::vector<double> b, std::vector<double> c,PivotSelection pivot_selection); 
+    Dictionary(std::vector<std::vector<double>> A, std::vector<double> b, std::vector<double> c,PivotSelection pivot_selection,bool verbose); 
     void print_state(void); 
     int pick_nonbasis_pivot(void); 
     int pick_basis_pivot(int nonbasis_pivot); 
