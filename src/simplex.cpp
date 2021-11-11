@@ -6,8 +6,9 @@ Dictionary::Dictionary(
     std::vector<std::vector<double>> A, 
     std::vector<double> b,
     std::vector<double> c,
-    PivotSelection pivot_selection
-    ) :A(A),b(b),c(c),pivot_selection(pivot_selection) {
+    PivotSelection pivot_selection,
+    bool verbose
+    ) :A(A),b(b),c(c),pivot_selection(pivot_selection),verbose(verbose) {
     n = (int)c.size(); 
     m = (int)b.size(); 
     nonbasis_index.resize(n); 
@@ -131,8 +132,10 @@ void Dictionary::add_artificial_variable(int basis_pivot) {
     nonbasis_index.push_back(n+m-1);
 
     // first step to get a feasible dictionary 
-    printf("\nInitial state\n");
-    print_state(); 
+    if (verbose) {
+        printf("\nInitial state\n");
+        print_state(); 
+    }
     pivot_operation(n-1,basis_pivot); 
 }
 
@@ -218,8 +221,10 @@ OptimalSolution Dictionary::solve() {
     OptimalSolution solution; 
     int step = 0;
     while (true) {
-        printf("\nstep %d\n",++step);
-        print_state(); 
+        if (verbose) {
+            printf("\nstep %d\n",++step);
+            print_state(); 
+        }
         OptimalSolution tmp_solution = pivot_step(); 
         if (tmp_solution == Exist) {
             solution = Exist; 
