@@ -1,5 +1,7 @@
 #include "simplex.hpp"
 
+const double EPS = 1e-6; 
+
 Dictionary::Dictionary(
     std::vector<std::vector<double>> A, 
     std::vector<double> b,
@@ -37,7 +39,7 @@ void Dictionary::print_state(void) {
 int Dictionary::pick_nonbasis_pivot(void) {
     int nonbasis_pivot = -1;
     for (int i = 0;i < n;i++) {
-        if (c[i] > 0) {
+        if (c[i] > EPS) {
             if (nonbasis_pivot < 0) {
                 nonbasis_pivot = i;
             } else if (pivot_selection == Bland && nonbasis_index[i] < nonbasis_index[nonbasis_pivot]) {
@@ -54,7 +56,7 @@ int Dictionary::pick_basis_pivot(int nonbasis_pivot) {
     int basis_pivot = -1;
     double min_ratio = -1;
     for (int i = 0;i < m;i++) {
-        if (A[i][nonbasis_pivot] > 0) {
+        if (A[i][nonbasis_pivot] > EPS) {
             if (basis_pivot < 0 || min_ratio > b[i]/A[i][nonbasis_pivot]) {
                 basis_pivot = i; 
                 min_ratio = b[i]/A[i][nonbasis_pivot];
@@ -204,7 +206,7 @@ OptimalSolution Dictionary::find_feasible() {
     std::vector<double> before_c = c;
     add_artificial_variable(basis_pivot); 
     OptimalSolution sol = solve(); 
-    if (sol != Exist || ans < 0.0) {
+    if (sol != Exist || ans < -EPS) {
         return NoExist;
     }
     delete_artificial_variable(); 
