@@ -1,7 +1,8 @@
 .DS_Store
 .vscode 
 
-src/*.o 
-src/*.out
+src/simplex/*.o 
+src/maxflow/*.o
 
-test 
+simplex_test
+maxflow_test
