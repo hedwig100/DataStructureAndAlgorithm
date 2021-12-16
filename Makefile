@@ -1,10 +1,10 @@
 CXX = g++
 CXXFLAGS = -std=gnu++14
 
-TESTSRCS = $(wildcard src/*.cpp)
-TESTOBJS = $(TESTSRCS:%.cpp=%.o)
+SIMPLEX_TESTSRCS = $(wildcard src/simplex/*.cpp)
+SIMPLEX_TESTOBJS = $(SIMPLEX_TESTSRCS:%.cpp=%.o)
 
-test: $(TESTOBJS)
+simplex_test: $(SIMPLEX_TESTOBJS)
 	$(CXX) $(CXXFLAGS) -o $@ $^ 
 
 clean: 
