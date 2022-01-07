@@ -3,7 +3,6 @@
 
 #include <stdlib.h>
 #include <stdbool.h>
-#include <stdio.h> // for debug
 
 // const 
 #define HASH_SIZE (1 << 20) 
@@ -12,8 +11,6 @@
 int calc_hash(int value,int hash_size,int a,int b); 
 
 // hash data
-struct HashData; 
-
 typedef struct HashData {
     int value; 
     struct HashData* next; 
