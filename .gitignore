@@ -4,7 +4,9 @@
 src/simplex/*.o 
 src/maxflow/*.o
 src/red_black_tree/*.o 
+src/hash/*.o
 
 simplex_test
 maxflow_test
 red_black_tree_test
+hash_test
